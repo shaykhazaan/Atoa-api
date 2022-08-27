@@ -9,10 +9,18 @@ const router = express.Router();
 //POST/PUT  /auth/signup
 router.put('/signup', authController.signup);
 
+//POST  /auth/login
 router.post('/login', authController.login);
 
 module.exports = router;
 
+
+
+
+
+
+
+//Validation logic through express-validator package
 // [
 //     body('email')
 //     .isEmail()

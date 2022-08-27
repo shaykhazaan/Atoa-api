@@ -19,11 +19,31 @@ exports.signup = (req, res, next) => {
         return user.save();
       })
       .then(result => {
-        res.status(201).json({message: 'User Created',userId: result._id })
+        const AccessToken = jwt.sign(
+          {
+            email: email,
+            userId: result._id.toString()
+          },
+          'accessTokenKey',
+        );
+        const refreshToken = jwt.sign(
+          {
+            email: email,
+            userId: result._id.toString()
+          },
+          'refreshTokenKey'
+        );
+        res.status(201).json({message: 'User Created', userId: result._id, accessToken: AccessToken, refreshToken: refreshToken })
       })
-      .catch(err => {console.log(err)})
+      .catch(err => {
+          if (!err.statusCode) {
+            err.statusCode = 500;
+          }
+          next(err);
+      })
 
 };
+
 
 exports.login = (req, res, next) => {
     const mobile = req.body.mobile;
@@ -32,25 +52,42 @@ exports.login = (req, res, next) => {
     User.findOne({mobile: mobile})
     .then(user => {
         if (!user) {
-            console.log('A user with this mobile no does not exist');
+            const error = new Error('A user with this mobile no. does not exist');
+            error.statusCode = 401;
+            throw error;
         }
         loadedUser = user;
         return bcrypt.compare(password, user.password);
     })
     .then(isEqual => {
         if (!isEqual) {
-            console.log('wrong password');            
+            const error = new Error('wrong password');
+            error.statusCode = 404;
+            throw error;            
         }
         const token = jwt.sign(
           {
             email: loadedUser.email, 
             userId: loadedUser._id.toString()
           }, 
-          'secretkey', 
-          {expiresIn: '5m'}  //expiry of the token
+          'accessTokenKey', 
+          {expiresIn: '1h'}  //expiry of the token is 5 minutes
         );
-        res.status(200).json({token: token});
+        const refreshToken = jwt.sign(
+          {
+            email: loadedUser.email,
+            userId: loadedUser._id.toString()
+          },
+          'refreshTokenKey',
+          { expiresIn: '5m'}  //expiry of the token is 5 minutes
+        );
+        res.status(200).json({accessToken: token, refreshToken: refreshToken});
     })
-    .catch(err => {console.log(err);});
+    .catch(err => {
+      if(!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
     
 };
