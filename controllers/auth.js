@@ -71,7 +71,7 @@ exports.login = (req, res, next) => {
             userId: loadedUser._id.toString()
           }, 
           'accessTokenKey', 
-          {expiresIn: '1h'}  //expiry of the token is 5 minutes
+          {expiresIn: '5m'}  //expiry of the token is 5 minutes
         );
         const refreshToken = jwt.sign(
           {
