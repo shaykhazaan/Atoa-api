@@ -1,19 +1,21 @@
 # Atoa-api
 ### About
-A Nodejs based rest api with 3 endpoints.   
-Language, Dependencies/libraries used: Nodejs, Express, mongoose, body-parser, bcrypt, jsonwebtoken.
+A Nodejs based rest api with 3 endpoints. It also provides authentication and error handling functions.  
+Language, Dependencies/libraries used: `Nodejs, Express, mongoose, body-parser, bcrypt, jsonwebtoken.`
 
-
+### Docker
 **setup instructions to run the code using docker.**  
 while docker is running.  
 ➢Pull this docker image by running the command in command line.     `docker pull shaykhazaan/atoaapi`
 
 ➢Now run this command:   `docker run --name atoa_c -p 3000:3000 shaykhazaan/atoaapi`
 
-You can now access api endpoints with any api tool.
+*You can now access api endpoints with any api tool.*
 
+### Documentation
 **Please visit this link for api documentation on how to use api.** `https://documenter.getpostman.com/view/23052814/VUxKTUmZ`
 
+### Pagination
 I have also implemented pagination for the transaction list endpoint and can be accessed via url parameters.  
 e.g.   
 `http://localhost:3000/?page=1`  
