@@ -13,3 +13,11 @@ while docker is running.
 You can now access api endpoints with any api tool.
 
 Please visit this link for api documentation on how to use api. https://documenter.getpostman.com/view/23052814/VUxKTUmZ
+
+I have also implemented pagination for the transaction list endpoint and can be accessed via url parameters.
+e.g. 
+http://localhost:3000/
+http://localhost:3000/?page=1
+http://localhost:3000/?page=2
+http://localhost:3000/?page=3
+...
